@@ -553,6 +553,16 @@ public class RouteDataObject {
 		return maxProfileSpeed > 0 ? maxProfileSpeed : maxSpeed;
 	}
 
+	public static float getSpeedTypeValue(String v, float def) {
+		if (v.equals("none")) {
+			return RouteDataObject.NONE_MAX_SPEED;
+		} else {
+			/* Map should contain values in km/h */
+			float f = SpeedTypeLimits.speedTypeMap.get(v) / 3.6f;
+			return f;
+		}
+	}
+
 	public static float parseSpeed(String v, float def) {
 		if (v.equals("none")) {
 			return RouteDataObject.NONE_MAX_SPEED;
@@ -568,18 +578,6 @@ public class RouteDataObject {
 			}
 		}
 		return def;
-	}
-
-	public static float getSpeedTypeValue(String v, float def) {
-		if (v.equals("none")) {
-			return RouteDataObject.NONE_MAX_SPEED;
-		} else {
-			float f = SpeedTypeLimits.speedTypeMap.get(v) / 3.6f;
-			if (v.contains("mph")) {
-				f *= 1.6f;
-			}
-			return f;
-		}
 	}
 
 	public static float parseLength(String v, float def) {
