@@ -8,6 +8,8 @@ public class SpeedTypeLimits {
 
     /*
      * Limits based on https://en.wikipedia.org/wiki/Speed_limits_by_country#Countries
+     * This is list of ISO 3166 country codes.
+     * Speed should be already in mk/h. If by law it is defined in mph it should be already calculated.
      */
     static {
         speedTypeMap.put("AL:urban", 40f); // Albania
