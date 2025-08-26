@@ -18,6 +18,13 @@ import static net.osmand.router.GeneralRouter.GeneralRouterProfile;
 public class RouteDataObject {
 	/*private */static final int RESTRICTION_SHIFT = 3;
 	/*private */static final int RESTRICTION_MASK = 7;
+
+	/* private */ static final Map<String, Float> speedTypeMap = new HashMap<>();
+
+	static {
+		speedTypeMap.put("PL:urban", 50f);
+		speedTypeMap.put("PL:rural", 90f);
+	}
 	public static int HEIGHT_UNDEFINED = -80000;
 
 	public final RouteRegion region;
@@ -543,6 +550,10 @@ public class RouteDataObject {
 				// priority over default
 				maxSpeed = r.maxSpeed(RouteTypeRule.PROFILE_NONE) > 0 ? r.maxSpeed(RouteTypeRule.PROFILE_NONE) : maxSpeed;
 				maxProfileSpeed = r.maxSpeed(profile) > 0 ? r.maxSpeed(profile) : maxProfileSpeed;
+				if (0.0f == maxSpeed) {
+					maxSpeed = r.maxSpeedType(RouteTypeRule.PROFILE_NONE) > 0 ?
+							r.maxSpeedType(RouteTypeRule.PROFILE_NONE) : maxSpeed;
+				}
 			}
 		}
 		return maxProfileSpeed > 0 ? maxProfileSpeed : maxSpeed;
@@ -563,6 +574,18 @@ public class RouteDataObject {
 			}
 		}
 		return def;
+	}
+
+	public static float getSpeedTypeValue(String v, float def) {
+		if (v.equals("none")) {
+			return RouteDataObject.NONE_MAX_SPEED;
+		} else {
+			float f = speedTypeMap.get(v) / 3.6f;
+			if (v.contains("mph")) {
+				f *= 1.6f;
+			}
+			return f;
+		}
 	}
 
 	public static float parseLength(String v, float def) {
